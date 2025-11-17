@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Birthday Surprise</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Dancing+Script&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family: 'Dancing Script', cursive; }
+body { overflow:hidden; transition: background 2s ease-in-out; position:relative; height:100vh; }
+#cross {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 70px;
+  font-weight: bold;
+  z-index: 1000;
+  color: white;
+  text-shadow: 2px 2px 12px black;
+  transition: color 1s ease, text-shadow 1s ease;
+}
+#content {
+  position: absolute;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  text-align:center;
+  color:white;
+}
+.gold-text {
+  font-size:70px;
+  font-weight:bold;
+  font-family: 'Great Vibes', cursive;
+  background: linear-gradient(90deg, #FFD700, #FFF4A3, #FFD700);
+  background-size: 200% auto;
+  color:transparent;
+  background-clip: text;
+  -webkit-background-clip:text;
+  animation: shimmer 3s infinite linear;
+  opacity:0;
+  transition: opacity 2s ease-in;
+}
+@keyframes shimmer { 0% { background-position:0%; } 100% { background-position:200%; } }
+.star {
+  position:absolute;
+  width:2px; height:2px;
+  background:white;
+  border-radius:50%;
+  animation: twinkle 2s infinite alternate;
+}
+@keyframes twinkle { 0%{opacity:0.2;} 100%{opacity:1;} }
+.moon {
+  position:absolute;
+  width:80px; height:80px;
+  border-radius:50%;
+  background:radial-gradient(circle, #fff 60%, #ddd 100%);
+  top:50px;
+  left:80%;
+  box-shadow:0 0 20px #fff;
+  animation: glow 3s infinite alternate;
+}
+@keyframes glow { 0% { box-shadow:0 0 10px #fff; } 100% { box-shadow:0 0 25px #fff; } }
+.butterfly {
+  position:absolute;
+  width:50px; height:50px;
+  background-size:cover;
+  animation: fly 15s ease-in-out infinite;
+}
+@keyframes fly {
+  0%{transform:translate(0,0) rotate(0deg);}
+  25%{transform:translate(200px,50px) rotate(30deg);}
+  50%{transform:translate(400px,0px) rotate(-20deg);}
+  75%{transform:translate(200px,-50px) rotate(20deg);}
+  100%{transform:translate(0,0) rotate(0deg);}
+}
+.petal {
+  position:fixed; top:-20px; width:30px; height:30px;
+  background-size:cover; animation: fall 6s linear infinite;
+  opacity:0.9;
+}
+@keyframes fall {0%{transform:translateY(-20px) rotate(0deg);}100%{transform:translateY(120vh) rotate(360deg);}}
+.snow {
+  position:fixed; top:-10px; width:8px; height:8px; background:white; border-radius:50%;
+  opacity:0.9; animation:snowFall 7s linear infinite;
+}
+@keyframes snowFall {0%{transform:translateY(-10px);}100%{transform:translateY(120vh);}}
+button {
+  padding:15px 30px; background:#ff4d6d; color:white; border:none;
+  border-radius:15px; font-size:22px; margin-top:20px; cursor:pointer;
+  display:none; animation:pop 0.5s ease forwards; transform-origin:center;
+  font-family: 'Dancing Script', cursive;
+}
+button:hover { transform:scale(1.2); transition:0.3s; }
+@keyframes pop { from{transform:scale(0);} to{transform:scale(1);} }
+.verseText {
+  font-size:40px; font-weight:bold; color:#FFD700; text-shadow:2px 2px 10px black; opacity:0; transition:opacity 2s ease-in;
+  margin-top:20px;
+  font-family: 'Great Vibes', cursive;
+}
+</style>
+</head>
+<body>
+<div id="cross">✝</div>
+<div id="content"></div>
+
+<script>
+const content = document.getElementById("content");
+const cross = document.getElementById("cross");
+
+const butterflyImg = "https://i.imgur.com/7x0oF3b.png"; // butterfly PNG
+const petalImg = "https://i.imgur.com/8eQXK0R.png"; // rose petal PNG
+const gardenImg = "https://i.imgur.com/q8tqTjR.jpeg"; // garden background
+
+// Utility functions
+function createStars(count){
+  for(let i=0;i<count;i++){
+    let star=document.createElement("div");
+    star.className="star";
+    star.style.top=Math.random()*100+"vh";
+    star.style.left=Math.random()*100+"vw";
+    star.style.animationDuration=(1+Math.random()*2)+"s";
+    document.body.appendChild(star);
+  }
+}
+function createButterflies(count){
+  for(let i=0;i<count;i++){
+    let b=document.createElement("div");
+    b.className="butterfly";
+    b.style.backgroundImage="url('"+butterflyImg+"')";
+    b.style.top=Math.random()*70+'vh';
+    b.style.left=Math.random()*90+'vw';
+    b.style.animationDuration=(12+Math.random()*8)+'s';
+    document.body.appendChild(b);
+  }
+}
+function createPetals(count){
+  for(let i=0;i<count;i++){
+    let petal=document.createElement("div");
+    petal.className="petal";
+    petal.style.backgroundImage="url('"+petalImg+"')";
+    petal.style.left=Math.random()*100+"vw";
+    petal.style.animationDelay=Math.random()*5+"s";
+    document.body.appendChild(petal);
+  }
+}
+function createSnow(count){
+  for(let i=0;i<count;i++){
+    let snow=document.createElement("div");
+    snow.className="snow";
+    snow.style.left=Math.random()*100+"vw";
+    snow.style.animationDelay=Math.random()*7+"s";
+    document.body.appendChild(snow);
+  }
+}
+
+// Phase management
+function phase1(){ // Night
+  document.body.style.background="radial-gradient(ellipse at bottom, #000022, #000000)";
+  cross.style.color="white";
+  content.innerHTML="<h2>✨ A blessed night... ✨</h2>";
+  createStars(50);
+  let moon=document.createElement("div"); moon.className="moon"; document.body.appendChild(moon);
+}
+
+function phase2(){ // Day - Garden & butterflies
+  document.body.style.background="url('"+gardenImg+"') center/cover no-repeat";
+  cross.style.color="black";
+  content.innerHTML="<h2>🌼 A beautiful new day... 🌼</h2>";
+  createButterflies(7);
+}
+
+function phase3(){ // Birthday Reveal
+  document.body.style.background="white";
+  cross.style.color="black";
+  content.innerHTML=`<div class='gold-text'>Happy Birthday Rachael</div>`;
+  document.querySelector(".gold-text").style.opacity="1";
+  createPetals(35);
+
+  // Show Tap for Surprise button
+  surpriseBtn.style.display="block";
+  surpriseBtn.style.position="absolute"; 
+  surpriseBtn.style.top="50%"; 
+  surpriseBtn.style.left="50%";
+  surpriseBtn.style.transform="translate(-50%, -50%)";
+}
+
+function phase4(){ // Poetic line + Snow
+  document.body.style.background="#001652";
+  cross.style.color="white";
+  content.innerHTML=`<h2 style='color:white;'>\"You are the rhythm to my heartbeat, the blessing my prayers found.\"</h2>`;
+  createSnow(40);
+}
+
+// Hidden Bible Verse
+function showVerse(){
+  let verse=document.createElement("div");
+  verse.className="verseText";
+  verse.innerText="“The Lord bless you and keep you; the Lord make his face shine upon you and be gracious to you.” – Numbers 6:24-25";
+  content.appendChild(verse);
+  setTimeout(()=>{verse.style.opacity="1";},100);
+}
+
+// Buttons
+const surpriseBtn=document.createElement("button");
+surpriseBtn.id="surpriseBtn"; 
+surpriseBtn.innerText="Tap for Surprise"; 
+surpriseBtn.onclick=()=>{
+  phase4();
+  surpriseBtn.style.display="none";
+  verseBtn.style.display="none";
+};
+document.body.appendChild(surpriseBtn);
+
+const verseBtn=document.createElement("button");
+verseBtn.id="verseBtn"; 
+verseBtn.innerText="For You"; 
+verseBtn.onclick=()=>{
+  showVerse();
+  verseBtn.style.display="none";
+};
+document.body.appendChild(verseBtn);
+
+// Start phases
+phase1();
+setTimeout(phase2,16000);
+setTimeout(()=>{
+  phase3();
+  // Show For You button after 3 sec
+  setTimeout(()=>{
+    verseBtn.style.display="block";
+    verseBtn.style.position="absolute"; 
+    verseBtn.style.top="65%"; 
+    verseBtn.style.left="50%";
+    verseBtn.style.transform="translate(-50%, -50%)";
+  },3000);
+},30000);
+</script>
+</body>
+</html>
